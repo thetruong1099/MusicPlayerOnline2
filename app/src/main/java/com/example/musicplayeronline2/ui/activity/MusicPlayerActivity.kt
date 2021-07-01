@@ -303,8 +303,10 @@ class MusicPlayerActivity : AppCompatActivity(), ServiceConnection {
     private fun playPauseBtnClicked() {
         if (musicService.isPlaying) {
             btn_play.setImageResource(R.drawable.baseline_play_arrow_24)
+            job.cancel()
         } else {
             btn_play.setImageResource(R.drawable.baseline_pause_24)
+            handleSeekBarCoroutine()
         }
         musicService.playPauseMusic()
     }

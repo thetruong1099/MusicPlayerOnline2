@@ -42,8 +42,10 @@ class PersonFragment : Fragment() {
 
     private val onItemClick: (song: Song) -> Unit = { song ->
         if (currentData.checkInternet) {
+            currentData.currentSongs.clear()
             currentData.currentSongs = tempListSong
             currentData.statusOnOff = true
+            currentData.currentSongPos = tempListSong.indexOf(song)
             var intent = Intent(requireContext(), MusicPlayerActivity::class.java)
             intent.putExtra("music", song)
             startActivity(intent)

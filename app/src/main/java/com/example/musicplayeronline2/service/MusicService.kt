@@ -111,10 +111,10 @@ class MusicService : Service() {
 
     fun playMusic(position: Int) {
 
-//        if (::mediaPlayer.isInitialized) {
+        if (mediaPlayer.isPlaying) {
         mediaPlayer.stop()
         mediaPlayer.release()
-//        }
+        }
 
         createMediaPlayer(position)
         mediaPlayer.start()
@@ -136,11 +136,11 @@ class MusicService : Service() {
                         .build()
                 )
                 setDataSource(uri)
-                try {
+//                try {
                     prepare()
-                } catch (e: Exception) {
-                    Log.d("aaaa", "createMediaPlayer: ${e.message}")
-                }
+//                } catch (e: Exception) {
+//                    Log.d("aaaa", "createMediaPlayer: ${e.message}")
+//                }
 
             }
         }

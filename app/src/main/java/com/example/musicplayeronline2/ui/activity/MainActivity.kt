@@ -177,11 +177,13 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     btn_play_main.setImageResource(R.drawable.baseline_play_arrow_24)
                     lav_music_disc_main.pauseAnimation()
                     lavProcess = lav_music_disc_main.progress
+                    job.cancel()
                 } else {
                     btn_play_main.setImageResource(R.drawable.baseline_pause_24)
                     lav_music_disc_main.setMinProgress(lavProcess)
                     lav_music_disc_main.playAnimation()
                     lav_music_disc_main.setMinProgress(0.0F)
+                    handleProcessBar()
                 }
                 musicService.playPauseMusic()
             }
@@ -210,7 +212,6 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     private fun handleProcessBar() {
         job = CoroutineScope(Dispatchers.Default).launch {
-            var i = 0
             while (true) {
                 if (::musicService.isInitialized) {
                     updateUIProcessBar(musicService.currentPosition, musicService.duration)
