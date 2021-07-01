@@ -77,7 +77,8 @@ class SearchActivity : AppCompatActivity() {
                                         i.album?.name,
                                         null,
                                         i.thumbnail,
-                                        "http://api.mp3.zing.vn/api/streaming/audio/${i.idSong}/128"
+                                        "http://api.mp3.zing.vn/api/streaming/audio/${i.idSong}/128",
+                                        i.code
                                     )
                                     musicList.add(song)
                                 }
@@ -144,7 +145,8 @@ class SearchActivity : AppCompatActivity() {
                                                         null,
                                                         null,
                                                         "https://photo-resize-zmp3.zadn.vn/w320_r1x1_png/${s.thumb}",
-                                                        "http://api.mp3.zing.vn/api/streaming/audio/${s.idSong}/128"
+                                                        "http://api.mp3.zing.vn/api/streaming/audio/${s.idSong}/128",
+                                                        null
                                                     )
                                                     musicList.add(song)
                                                 }

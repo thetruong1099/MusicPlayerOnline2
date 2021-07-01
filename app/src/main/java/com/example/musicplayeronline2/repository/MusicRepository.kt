@@ -30,6 +30,15 @@ class MusicRepository(app: Application) {
     suspend fun searchSong(type: String, num: Int, query: String) =
         ApiConfig.apiService3.searchSong(type, num, query)
 
+    suspend fun getListMusicUSUK(
+        op: String,
+        start: Int,
+        length: Int,
+        id: String
+    ) = ApiConfig.apiService.getlistMusicUSUK(op, start, length, id)
+
+    suspend fun getInfoAlbum(type: String, key: String) =
+        ApiConfig.apiService.getInfoAlbum(type, key)
     //database
 
     private val musicDAO: MusicDAO

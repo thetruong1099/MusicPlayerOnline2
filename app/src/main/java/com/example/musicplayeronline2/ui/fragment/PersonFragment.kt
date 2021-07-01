@@ -78,7 +78,8 @@ class PersonFragment : Fragment() {
                     null,
                     null,
                     i.thumbnail,
-                    "http://api.mp3.zing.vn/api/streaming/audio/${i.idSong}/128"
+                    "http://api.mp3.zing.vn/api/streaming/audio/${i.idSong}/128",
+                    i.code
                 )
                 songList.add(song)
             }

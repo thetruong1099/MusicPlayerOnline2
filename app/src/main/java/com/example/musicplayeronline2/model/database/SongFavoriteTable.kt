@@ -10,7 +10,8 @@ data class SongFavoriteTable(
     @ColumnInfo(name = "name_song_col") var nameSong: String,
     @ColumnInfo(name = "artist_col") var artist: String,
     @ColumnInfo(name = "thumbnail_col") var thumbnail: String?,
-    @ColumnInfo(name = "favorite_col") var statusFavorite: Boolean
+    @ColumnInfo(name = "favorite_col") var statusFavorite: Boolean,
+    @ColumnInfo(name = "code_col") var code: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_col")

@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.musicplayeronline2.R
 import com.example.musicplayeronline2.data.CurrentData
+import com.example.musicplayeronline2.model.Song
 import com.example.musicplayeronline2.utils.Status
 import com.example.musicplayeronline2.viewModel.CurrentDataViewModel
 import com.example.musicplayeronline2.viewModel.MusicViewModel
@@ -41,36 +43,62 @@ class InfoSongFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        val song = currentData.currentSongs[currentData.currentSongPos]
+        updateUi(song)
+
         val currentDataViewModel =
             ViewModelProvider(requireActivity()).get(CurrentDataViewModel::class.java)
 
         currentDataViewModel.getCurrentSong().observe(viewLifecycleOwner) { song ->
+            updateUi(song)
+        }
+    }
 
-            if (currentData.statusOnOff) {
+    private fun updateUi(song: Song) {
 
-                if (song.thumbnail == null) {
-                    img_song.setImageResource(R.drawable.note_music)
-                } else {
-                    Glide.with(requireContext()).load(song.thumbnail).into(img_song)
+        if (currentData.statusOnOff) {
+
+            if (song.thumbnail == null) {
+                img_song.setImageResource(R.drawable.note_music)
+            } else {
+                Glide.with(requireContext()).load(song.thumbnail).into(img_song)
+            }
+
+            musicViewModel.getInfoSong("audio", song.idSong).observe(this, Observer {
+                it?.let { resource ->
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            lav_loader.visibility = View.GONE
+                            resource.data?.let { musicObject ->
+                                var string: String = ""
+                                for (i in musicObject.song.genres) {
+                                    string = i.name + " " + string
+                                }
+                                tv_genres.text = string.trim()
+                            }
+                        }
+                        Status.ERROR -> {
+                            lav_loader.visibility = View.GONE
+                            Log.d("aaaa", "refreshData: ${it.message}")
+                        }
+                        Status.LOADING -> {
+                            lav_loader.visibility = View.VISIBLE
+                        }
+                    }
                 }
-
-                musicViewModel.getInfoSong("audio", song.idSong).observe(this) {
+            })
+            if (song.code!=null){
+                musicViewModel.getInfoAlbum("audio", song.code!!).observe(viewLifecycleOwner) {
                     it?.let { resource ->
                         when (resource.status) {
                             Status.SUCCESS -> {
                                 lav_loader.visibility = View.GONE
                                 resource.data?.let { musicObject ->
-                                    var string: String = ""
-                                    for (i in musicObject.song.genres) {
-                                        string = i.name + " " + string
-                                    }
-                                    tv_genres.text = string.trim()
+                                    tv_album_name.text = musicObject.song.album?.name
                                 }
                             }
                             Status.ERROR -> {
                                 lav_loader.visibility = View.GONE
-//                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG)
-//                                    .show()
                                 Log.d("aaaa", "refreshData: ${it.message}")
                             }
                             Status.LOADING -> {
@@ -79,26 +107,26 @@ class InfoSongFragment : Fragment() {
                         }
                     }
                 }
+            }else{
+                tv_album_name.text = "Unknow Album"
+            }
+        } else {
+
+            val thumbnail = android.media.ThumbnailUtils.createAudioThumbnail(
+                File(song.url),
+                Size(320, 320),
+                null
+            )
+
+            if (thumbnail == null) {
+                img_song.setImageResource(R.drawable.note_music)
             } else {
-
-                val thumbnail = android.media.ThumbnailUtils.createAudioThumbnail(
-                    File(song.url),
-                    Size(320, 320),
-                    null
-                )
-
-                if (thumbnail == null) {
-                    img_song.setImageResource(R.drawable.note_music)
-                } else {
-                    img_song.setImageBitmap(thumbnail)
-                }
-
-                if (song.genres == null) {
-                    tv_genres.text = "Unknow Genres"
-                } else tv_genres.text = song.genres
+                img_song.setImageBitmap(thumbnail)
             }
 
-            tv_name_song.text = song.name
+            if (song.genres == null) {
+                tv_genres.text = "Unknow Genres"
+            } else tv_genres.text = song.genres
 
             if (song.album == null) {
                 tv_album_name.text = "Unknow Album"
@@ -106,13 +134,14 @@ class InfoSongFragment : Fragment() {
                 tv_album_name.text = song.album
             }
 
-            if (song.artist == null) {
-                tv_artist.text = "Unknow Artist"
-            } else {
-                tv_artist.text = song.artist
-            }
+        }
 
+        tv_name_song.text = song.name
 
+        if (song.artist == null) {
+            tv_artist.text = "Unknow Artist"
+        } else {
+            tv_artist.text = song.artist
         }
     }
 }

@@ -47,4 +47,19 @@ interface MusicApi {
         @Query("num") num: Int,
         @Query("query") query: String
     ): MusicObject3
+
+    //get 100 song us uk
+    @GET("/xhr/media/get-list?")
+    suspend fun getlistMusicUSUK(
+        @Query("op") op: String,
+        @Query("start") start: Int,
+        @Query("length") length: Int,
+        @Query("id") id: String
+    ): MusicObject
+
+    @GET("/xhr/media/get-source?")
+    suspend fun getInfoAlbum(
+        @Query("type") type: String,
+        @Query("key") key:String
+    ):MusicObject2
 }

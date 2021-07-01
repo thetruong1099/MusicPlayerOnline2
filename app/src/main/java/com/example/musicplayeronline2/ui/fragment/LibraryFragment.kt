@@ -72,6 +72,7 @@ class LibraryFragment : Fragment() {
                     i.genres,
                     null,
                     i.urlSong,
+                    null
                 )
                 songList.add(song)
             }

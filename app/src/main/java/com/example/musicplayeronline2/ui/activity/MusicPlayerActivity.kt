@@ -57,10 +57,6 @@ class MusicPlayerActivity : AppCompatActivity(), ServiceConnection {
         )[MusicViewModel::class.java]
     }
 
-    private val connectionNetwork by lazy {
-        ConnectionLiveData(application)
-    }
-
     private lateinit var music: Song
 
     private val currentData = CurrentData.instance
@@ -478,6 +474,7 @@ class MusicPlayerActivity : AppCompatActivity(), ServiceConnection {
                         val name = song.name
                         val artist = song.artist
                         val thumbnail = song.thumbnail
+                        val code = song.code
 
                         musicViewModel.insertFavoriteSong(
                             SongFavoriteTable(
@@ -485,7 +482,8 @@ class MusicPlayerActivity : AppCompatActivity(), ServiceConnection {
                                 name,
                                 artist,
                                 thumbnail,
-                                true
+                                true,
+                                code
                             )
                         )
 

@@ -15,4 +15,6 @@ data class SongApi(
     var album: Album?,
     @SerializedName("genres")
     var genres: MutableList<Genres>,
+    @SerializedName("code")
+    var code:String
 )

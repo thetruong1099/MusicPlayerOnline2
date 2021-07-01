@@ -9,5 +9,6 @@ data class Song(
     var album: String?,
     var genres: String?,
     var thumbnail: String?,
-    var url: String
+    var url: String,
+    var code:String?
 ) : Serializable

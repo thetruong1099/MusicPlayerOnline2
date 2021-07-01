@@ -79,6 +79,26 @@ class MusicViewModel(application: Application) : ViewModel() {
             emit(Resource.error(null, ex.message ?: "ERROR !!"))
         }
     }
+
+    fun getListMusicUSUK(op: String, start: Int, length: Int, id: String) =
+        liveData(Dispatchers.IO) {
+            emit(Resource.loading(null))
+            try {
+                emit(Resource.success(musicRepository.getListMusicUSUK(op, start, length, id)))
+            } catch (ex: Exception) {
+                emit(Resource.error(null, ex.message ?: "ERROR !!"))
+            }
+        }
+
+    fun getInfoAlbum(type: String, key: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(musicRepository.getInfoAlbum(type, key)))
+        } catch (ex: Exception) {
+            emit(Resource.error(null, ex.message ?: "ERROR !!"))
+        }
+    }
+
     //database
 
     //download
